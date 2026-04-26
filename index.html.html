@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>批判性评价 — 有氧+抗阻复合运动对肥胖儿童影响的系统综述与Meta分析</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: #ddd9d0;
+    --text: #1a1814;
+    --text2: #5a5650;
+    --text3: #8a8680;
+    --accent: #c0392b;
+    --accent2: #e67e22;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --red: #c0392b;
+    --amber: #e67e22;
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .page-header {
+    background: var(--text);
+    color: #f7f5f0;
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(192,57,43,0.15) 100%);
+    pointer-events: none;
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .header-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 720px;
+    margin-bottom: 10px;
+  }
+  .header-subtitle {
+    font-size: 13px;
+    color: #a09890;
+    font-weight: 300;
+  }
+
+  /* Main layout */
+  .container { max-width: 860px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  /* Score cards */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .score-card.green::after { background: var(--green); }
+  .score-card.amber::after { background: var(--amber); }
+  .score-card.red::after { background: var(--red); }
+  .score-card.blue::after { background: var(--blue); }
+
+  .score-num {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .score-denom { font-size: 16px; color: var(--text3); font-weight: 400; }
+  .score-label { font-size: 12px; color: var(--text2); margin-top: 6px; }
+  .score-bar-bg { height: 3px; background: #e8e4de; border-radius: 2px; margin-top: 10px; }
+  .score-bar-fill { height: 3px; border-radius: 2px; }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 20px;
+    font-size: 12px; color: var(--text2);
+    align-items: center;
+  }
+  .legend strong { font-size: 12px; color: var(--text); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+  .tag-pos { background: #d5f0e0; color: #1a6b3a; }
+  .tag-neg { background: #fde8e6; color: #922b21; }
+  .tag-warn { background: #fdebd0; color: #935116; }
+
+  /* Sections */
+  .section { margin-bottom: 14px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .section-header:hover { background: var(--surface2); }
+  .section-header.open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-color: transparent;
+  }
+  .section-num {
+    width: 26px; height: 26px;
+    background: var(--text);
+    color: #f7f5f0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .section-badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+  .badge-ok { background: #d5f0e0; color: #1a6b3a; }
+  .badge-partial { background: #fdebd0; color: #935116; }
+  .badge-bad { background: #fde8e6; color: #922b21; }
+  .chevron { font-size: 10px; color: var(--text3); transition: transform 0.2s; }
+  .chevron.open { transform: rotate(90deg); }
+
+  .section-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    display: none;
+  }
+  .section-body.open { display: block; }
+
+  .item {
+    display: flex; gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .item:last-child { border-bottom: none; }
+  .item-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .icon-pos { background: #d5f0e0; color: #1a6b3a; }
+  .icon-neg { background: #fde8e6; color: #922b21; }
+  .icon-warn { background: #fdebd0; color: #935116; }
+
+  .item-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .item-desc { font-size: 12px; color: var(--text2); line-height: 1.65; }
+
+  /* Summary */
+  .summary-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 32px;
+  }
+  .summary-box h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  .summary-section { margin-bottom: 16px; }
+  .summary-section h3 { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .summary-section p { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+  .priority-list { list-style: none; margin-top: 8px; }
+  .priority-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13px; color: var(--text2);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-list li:last-child { border-bottom: none; }
+  .priority-num {
+    width: 20px; height: 20px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-label">批判性评价报告</div>
+  <div class="header-title">有氧运动联合抗阻训练对超重/肥胖儿童体成分、糖脂代谢及血压影响的系统综述与Meta分析</div>
+  <div class="header-subtitle">内容评价 · 方法论评价 · 形式评价 · 修改建议</div>
+</div>
+
+<div class="container">
+
+  <!-- Score Cards -->
+  <div class="score-grid">
+    <div class="score-card green">
+      <div class="score-num" style="color:#27ae60">3.5<span class="score-denom">/5</span></div>
+      <div class="score-label">内容完整性</div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:70%;background:#27ae60"></div></div>
+    </div>
+    <div class="score-card amber">
+      <div class="score-num" style="color:#e67e22">2.5<span class="score-denom">/5</span></div>
+      <div class="score-label">方法论严谨性</div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:50%;background:#e67e22"></div></div>
+    </div>
+    <div class="score-card red">
+      <div class="score-num" style="color:#c0392b">2.0<span class="score-denom">/5</span></div>
+      <div class="score-label">形式完整性</div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:40%;background:#c0392b"></div></div>
+    </div>
+    <div class="score-card blue">
+      <div class="score-num" style="color:#2980b9">3.2<span class="score-denom">/5</span></div>
+      <div class="score-label">综合评价</div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:64%;background:#2980b9"></div></div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <strong>图例：</strong>
+    <span class="tag tag-pos">优点</span>
+    <span class="tag tag-neg">问题</span>
+    <span class="tag tag-warn">需改进</span>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s1')" id="hd-s1">
+      <div class="section-num">①</div>
+      <div class="section-title">研究目的与研究背景</div>
+      <span class="section-badge badge-ok">总体良好</span>
+      <span class="chevron" id="ch-s1">▶</span>
+    </div>
+    <div class="section-body" id="s1">
+      <div class="item">
+        <div class="item-icon icon-pos">✓</div>
+        <div>
+          <div class="item-title"><span class="tag tag-pos">优点</span> 研究必要性阐述清晰</div>
+          <div class="item-desc">准确指出有关有氧联合抗阻训练系统性证据的缺失，并明确说明需要对性别及干预时长进行亚组分析的必要性。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-pos">✓</div>
+        <div>
+          <div class="item-title"><span class="tag tag-pos">优点</span> 采用PICOS框架</div>
+          <div class="item-desc">纳入标准以PICOS框架系统呈现，目标年龄（5~19岁）、诊断标准（超重/肥胖）及对照组条件均有明确定义。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> PROSPERO注册号格式疑误</div>
+          <div class="item-desc">注册号"CRD420261346874"与PROSPERO标准格式（CRD42YYYY######，共10位数字）不符，位数偏多。需核实实际注册情况。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 与已有Meta分析的差异化不足</div>
+          <div class="item-desc">Chen等（2021，参考文献24）已就类似主题发表Meta分析。本研究在引言中应更清晰地阐明与既有研究的本质区别，以充分证明研究价值。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s2')" id="hd-s2">
+      <div class="section-num">②</div>
+      <div class="section-title">文献检索与筛选</div>
+      <span class="section-badge badge-partial">部分不足</span>
+      <span class="chevron" id="ch-s2">▶</span>
+    </div>
+    <div class="section-body" id="s2">
+      <div class="item">
+        <div class="item-icon icon-pos">✓</div>
+        <div>
+          <div class="item-title"><span class="tag tag-pos">优点</span> 覆盖5大核心数据库</div>
+          <div class="item-desc">检索了PubMed、Web of Science、Cochrane Library、Embase及Scopus，并补充了参考文献追溯检索。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 检索截止日期年份缺失</div>
+          <div class="item-desc">摘要中仅写"February 28th"，未注明年份；正文虽补充为"2026年2月28日"，但摘要须同步修正，以确保信息完整。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 语言限制偏倚未有效应对</div>
+          <div class="item-desc">仅纳入英文文献，系统性排除了中文、韩文、西班牙文等语种的RCT。此局限仅在"研究局限性"部分简略提及，但语言偏倚（language bias）是GRADE降级的重要因素，应在方法部分提前说明并讨论其潜在影响。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 检索策略具体性不足</div>
+          <div class="item-desc">正文指出因复合运动无对应MeSH词，仅使用"exercise"和"sports"等通用词。这可能降低检索敏感性。建议在正文中对附录1的检索策略进行简要概述，并说明关键词选择的理由。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 筛选一致性指标缺失</div>
+          <div class="item-desc">文中描述了两名研究者独立筛选的流程，但未报告评估者间一致性系数（如Cohen's κ），无法评估筛选过程的可重复性。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s3')" id="hd-s3">
+      <div class="section-num">③</div>
+      <div class="section-title">统计分析与异质性处理</div>
+      <span class="section-badge badge-bad">存在重大问题</span>
+      <span class="chevron open" id="ch-s3">▶</span>
+    </div>
+    <div class="section-body open" id="s3">
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 以基线不均衡为由随意剔除研究</div>
+          <div class="item-desc">分析WC（剔除1项）、TC（剔除2项）、HOMA-IR（剔除2项）时，以基线数据不均衡为由剔除个别研究。若此操作事先未在注册方案中明确规定，则存在结果选择性报告偏倚的风险。正确处理方式应为：采用Meta回归纳入基线值作为协变量，或通过敏感性分析评估影响。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 效应模型选择过于机械</div>
+          <div class="item-desc">以I²&lt;50%选固定效应模型、I²≥50%选随机效应模型的二分法，已不符合现行Cochrane手册（v6）推荐。应综合临床异质性与统计异质性进行综合判断，而非单纯依据I²阈值。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 异质性来源未能查明</div>
+          <div class="item-desc">葡萄糖（Glucose）、胰岛素（Insulin）、甘油三酯（TG）等指标存在极高异质性，经敏感性分析后仍无法定位原因。全文未进行Meta回归分析（如纳入干预强度、年龄、基线BMI等协变量），导致高异质性成因悬而未决。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> WMD/SMD混用的依据不明</div>
+          <div class="item-desc">体成分及血压指标采用WMD，脂质和血糖指标采用SMD，文中虽提及选用SMD的原因是"单位或测量方法不同"，但未以表格形式列出各指标的实际单位差异，读者无法自行核实。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 发表偏倚处理不完整</div>
+          <div class="item-desc">LDL已发现显著发表偏倚（Egger检验p=0.014），但未进行剪补法（trim-and-fill）等校正分析。Funnel图的非对称性也缺乏详细解读。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s4')" id="hd-s4">
+      <div class="section-num">④</div>
+      <div class="section-title">结果呈现与亚组分析</div>
+      <span class="section-badge badge-partial">部分不足</span>
+      <span class="chevron" id="ch-s4">▶</span>
+    </div>
+    <div class="section-body" id="s4">
+      <div class="item">
+        <div class="item-icon icon-pos">✓</div>
+        <div>
+          <div class="item-title"><span class="tag tag-pos">优点</span> 效应量报告规范</div>
+          <div class="item-desc">一致报告了WMD/SMD、95%置信区间、Z值及P值，结果指标覆盖了血压、体成分、糖脂代谢等多个维度，研究范围较为全面。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 亚组分析解读存在逻辑错误</div>
+          <div class="item-desc">BMI亚组分析中，性别交互作用检验P=0.4，组间差异不显著，却仍得出"女性效果可能更好"的结论。这是典型的"亚组钓鱼（subgroup fishing）"问题——仅凭某一亚组的Z值显著便妄下结论，而忽视了组间比较（interaction test）的阴性结果。同样的逻辑错误在TG、LDL、HDL的亚组分析中反复出现。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> "12周最优"结论过度外推</div>
+          <div class="item-desc">12周以上的研究仅有1~2项，统计检验效能极低，在此基础上得出"12周为最优干预期"的结论缺乏充分依据，需谨慎表述。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 缺乏临床意义讨论</div>
+          <div class="item-desc">BMI的WMD为-1.32，虽具统计学显著性，但未与儿童青少年群体的最小临床重要差异（MCID）进行比较讨论。统计显著性与临床意义并非等同，两者应分开论述。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s5')" id="hd-s5">
+      <div class="section-num">⑤</div>
+      <div class="section-title">证据质量评估（偏倚风险）</div>
+      <span class="section-badge badge-partial">需要改进</span>
+      <span class="chevron" id="ch-s5">▶</span>
+    </div>
+    <div class="section-body" id="s5">
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 使用ROB-1的适宜性存疑</div>
+          <div class="item-desc">Cochrane手册现行版（v6）推荐使用RoB 2.0（以结局指标为单位的偏倚风险评估），而非旧版ROB-1。运动干预研究中，两版工具在盲法评估的处理逻辑上存在明显差异，应说明选用ROB-1的理由或升级至RoB 2.0。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 未进行GRADE证据分级</div>
+          <div class="item-desc">系统综述的国际规范要求提供GRADE证据质量评级表。缺少GRADE评估，文章的推荐意见便缺乏可支撑的证据强度等级，削弱了结论的说服力。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 盲法条目评估过于宽松</div>
+          <div class="item-desc">虽然将参与者与研究者盲法条目统一评为"不清楚"的理由成立，但结局评估者盲法（assessor blinding）可与此分开判断，不应一概而论。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section">
+    <div class="section-header" onclick="toggle('s6')" id="hd-s6">
+      <div class="section-num">⑥</div>
+      <div class="section-title">形式规范与文稿完整性</div>
+      <span class="section-badge badge-bad">尚未完成</span>
+      <span class="chevron open" id="ch-s6">▶</span>
+    </div>
+    <div class="section-body open" id="s6">
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 作者信息使用占位符</div>
+          <div class="item-desc">正文中多处出现"xxx"、"xx"等匿名占位符，作者贡献（Author Contributions）部分亦为空白。这是投稿前的基本填写项，须在提交前全部完成。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 图表未嵌入正文</div>
+          <div class="item-desc">Forest plot（图4~16）、漏斗图及敏感性分析图均仅存于附录，正文仅保留"Figure X. xxx"占位符。多数期刊要求主要结果的森林图须嵌入正文，现有格式不符合投稿要求。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 摘要与正文信息不一致</div>
+          <div class="item-desc">摘要中检索截止日期缺少年份，与正文（2026年2月28日）不符，需统一修正。部分结果数值的单位说明亦有缺失。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> 表1格式错误及符号歧义</div>
+          <div class="item-desc">表头合并单元格与数据行存在对齐错位；"W"同时用于表示"女性（Female）"和"周（week）"，造成严重歧义。注释中虽有说明，但"M is male; W is female; W is week"的重复定义本身已构成逻辑矛盾，须使用不同符号区分。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-neg">!</div>
+        <div>
+          <div class="item-title"><span class="tag tag-neg">问题</span> Ramezani 2017数据缺失</div>
+          <div class="item-desc">表1中Alireza Ramezani 2017一项的对照组年龄等数据缺失，需核查原文补充，或注明"未报告（not reported）"。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 英文表达有误</div>
+          <div class="item-desc">存在"the significant combined intervention significantly reduced"（3.4.1节，重复堆叠）等冗余表达；讨论部分"including hypertension and hypotension"（高血压与低血压均改善，语义矛盾）等错误表述。建议请以英语为母语的专业人士进行全文语言润色。</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-warn">△</div>
+        <div>
+          <div class="item-title"><span class="tag tag-warn">需改进</span> 缺少PRISMA 2020核查清单</div>
+          <div class="item-desc">文中声明遵循PRISMA 2020规范，但未将PRISMA核查清单作为补充材料附上。多数期刊要求随稿提交PRISMA核查清单文件。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-box">
+    <h2>综合评价总结</h2>
+    <div class="summary-section">
+      <h3>整体印象</h3>
+      <p>本研究选题合理，结果指标覆盖面较广，具有一定的临床参考价值。然而，在方法论严谨性与稿件完整性两方面，均存在投稿前须重点解决的问题。</p>
+    </div>
+    <div class="summary-section">
+      <h3>主要优点</h3>
+      <p>研究必要性论述逻辑清晰；采用PICOS框架，纳排标准明确；覆盖5大数据库；效应量报告一致规范；研究指标全面，兼顾体成分、糖脂代谢及血压。</p>
+    </div>
+    <div class="summary-section">
+      <h3>投稿前必须解决的核心问题</h3>
+      <ul class="priority-list">
+        <li><span class="priority-num">1</span>将基线不均衡研究的排除方式改为Meta回归或敏感性分析，或在注册方案中明确预先说明</li>
+        <li><span class="priority-num">2</span>将亚组分析解读统一规范为以"交互作用检验（P for interaction）"为判断依据</li>
+        <li><span class="priority-num">3</span>补充GRADE证据质量评级表</li>
+        <li><span class="priority-num">4</span>升级至RoB 2.0，或明确说明沿用ROB-1的理由</li>
+        <li><span class="priority-num">5</span>完成作者信息、作者贡献，并将主要图表嵌入正文</li>
+        <li><span class="priority-num">6</span>进行专业英文润色，修正文中语言错误</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>本评价报告由 Claude (Anthropic) 自动生成 · 仅供学术参考</footer>
+
+<script>
+function toggle(id) {
+  var body = document.getElementById(id);
+  var ch = document.getElementById('ch-' + id);
+  var hd = document.getElementById('hd-' + id);
+  var isOpen = body.classList.toggle('open');
+  hd.classList.toggle('open', isOpen);
+  ch.classList.toggle('open', isOpen);
+  ch.textContent = isOpen ? '▼' : '▶';
+}
+</script>
+</body>
+</html>
